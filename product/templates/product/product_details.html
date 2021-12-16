@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ product.name }}</title>
+</head>
+<body>
+  <h1>{{ product.name }}</h1>
+  <p>{{ product.description }}</p>
+  <p>{{ product.price }}</p>
+  {% if product.images.count %}
+    {% for pic in product.images.all %}
+        {% if pic.image %}
+            <img src="{{ pic.image.url }}">
+        {% else %}
+            <img src="https://via.placeholder.com/300">
+        {% endif %}
+    {% endfor %}
+  {% else %}
+    <img src="https://via.placeholder.com/300">
+  {% endif %}
+  <p><a role="button" href="{% url 'update-product' product.id %}">Редактировать</a> или <a role="button" href="{% url 'delete-product' product.id %}">Удалить</a></p>
+</body>
+</html>
