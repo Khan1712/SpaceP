@@ -1,15 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Удаление продукта</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% block body %}
   <h1>Вы действительно хотите удалить продукт</h1>
   <form method="post" >
       {% csrf_token %}
         <button type="submit">Удалить</button>
       <a href="{% url 'product-details' product.id %}"><button type="button">Отмена</button></a>
   </form>
-</body>
-</html>
+{% endblock body %}

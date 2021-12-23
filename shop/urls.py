@@ -16,18 +16,18 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 
-from product.views import ProductDetailsView, ProductsListView, CreateProductView, UpdateProductView, DeleteProductView
+from product.views import IndexPageView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', IndexPageView.as_view(), name='index'),
+    path('account/', include('account.urls')),
+    path('cart/', include('order.urls')),
+    path('products/', include('product.urls')),
     # path('products/', products_list, name='products_list'),
-    path('products/', ProductsListView.as_view(), name='product-list'),
-    path('products/<int:pk>/', ProductDetailsView.as_view(), name='product-details'),
-    path('products/create/', CreateProductView.as_view(), name='create-product'),
-    path('products/update/<int:pk>/', UpdateProductView.as_view(), name='update-product'),
-    path('products/delete/<int:pk>/', DeleteProductView.as_view(), name='delete-product')
+
 ]
 
 if settings.DEBUG:

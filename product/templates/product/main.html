@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Listing</title>
+    <link rel="stylesheet" href="{% static 'css/reset.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <div class="main">
+    <div class="products-main">
+        {% for product in products %}
+        <div class="product-card">
+            <a href="{% url 'product-details' product.id %}">
+            <img src="{{ product.images.first.image.url }}" alt="Product photo" class="product-img">
+            </a>
+            <h5>{{ product.name }}</h5>
+            <h4 class="product-price">{{ product.price|floatformat:2 }}</h4>
+            <a href="{% url 'product-details' product.id %}">
+            <button class="details-btn">Show</button>
+            </a>
+        </div>
+        {% endfor %}
+        <div class="pagination">
+            <a href="?page={{ products.previous_page_number }}">
+            <button class="page-btn">
+                Previous
+            </button>
+            </a>
+            <a href="?page={{ products.next_page_number }}">
+            <button>
+                Next
+            </button>
+            </a>
+        </div>
+    </div>
+</div>
+</body>
+</html>
