@@ -3,6 +3,7 @@ from django.forms import modelformset_factory
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, CreateView, ListView, UpdateView, DeleteView, TemplateView
 from django.views import View
+from django.db.models import Q
 
 from django.shortcuts import render, redirect
 
@@ -27,7 +28,7 @@ class ProductsListView(ListView):
     queryset = Product.objects.all()
     template_name = 'product/products_list.html'
     context_object_name = 'products'
-    paginate_by = 15
+    paginate_by = 5
 
 
 
@@ -84,6 +85,15 @@ class DeleteProductView(IsAdminMixin, DeleteView):
 
 class IndexPageView(TemplateView):
     template_name = 'product/index.html'
+
+
+class SearchResultsView(View):
+    def get(self, request):
+        queryset = None
+        search_param = request.GET.get('search')
+        if search_param is not None:
+            queryset = Product.objects.filter(Q(name__icontains=search_param)|Q(description__icontains=search_param))
+        return render(request, 'product/search.html', {'products': queryset})
 
 
 # TODO: закончить с вёрсткой

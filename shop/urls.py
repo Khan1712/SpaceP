@@ -19,6 +19,7 @@ from django.contrib import admin
 from django.urls import path, include
 
 from product.views import IndexPageView
+from order.views import ActivateOrderView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,6 +27,7 @@ urlpatterns = [
     path('account/', include('account.urls')),
     path('cart/', include('order.urls')),
     path('products/', include('product.urls')),
+    path('order/activate/<str:activation_code>/', ActivateOrderView.as_view()),
     # path('products/', products_list, name='products_list'),
 
 ]

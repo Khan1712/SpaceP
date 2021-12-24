@@ -3,7 +3,7 @@ from django.urls import reverse_lazy
 from django.views import View
 
 from order.forms import AddToCartForm
-from order.models import Cart
+from order.models import Cart, Order, OrderItem
 from product.models import Product
 
 
@@ -39,3 +39,26 @@ class IncrementQuantityView(View):
         product = get_object_or_404(Product, id=product_id)
         cart.increment_quantity(product.id)
         return redirect(reverse_lazy('cart-details'))
+
+
+class CreateOrderView(View):
+    def get(self, request):
+        session_cart = Cart(request)
+        if not session_cart.cart:
+            return redirect(reverse_lazy('index'))
+        order = Order(user=request.user, total_price=session_cart.get_total_price())
+        for id, values in session_cart.cart.values():
+            product = Product.objects.get(id=id)
+            OrderItem(order=order, product=product, quantity=values.get('quantity'))
+        session_cart.clean()
+        order.send_activation_mail()
+
+
+class ActivateOrderView(View):
+    def get(self, request, activation_Code):
+        order = Order.objects.get(user=request.user, activation_Code=activation_Code)
+        order.is_active = True
+        order.save()
+        order.send_mail()
+
+
